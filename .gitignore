@@ -7,3 +7,5 @@ venv/
 
 # 기타
 __pycache__/
+migrations/
+*.db
