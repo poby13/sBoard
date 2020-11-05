@@ -1,0 +1,9 @@
+# 테스트파일
+test*
+
+# 환경파일
+venv/
+.vscode/
+
+# 기타
+__pycache__/
