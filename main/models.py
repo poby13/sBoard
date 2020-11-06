@@ -1,4 +1,5 @@
 from main import db
+import mariadb
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
