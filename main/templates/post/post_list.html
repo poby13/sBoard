@@ -1,7 +1,7 @@
 {% if post_list %}
     <ul>
     {% for post in post_list %}
-        <li><a href="{{ url_for('post.detail', post_id=post_id) }}">{{ post.subject }}</a></li>
+        <li><a href="{{ url_for('post.detail', post_id=post.id) }}">{{ post.subject }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
