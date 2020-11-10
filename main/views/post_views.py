@@ -1,5 +1,9 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, url_for, request, render_template
 from main.models import Post
+from ..forms import PostForm, CommentForm
+from .. import db
+from werkzeug.utils import redirect
+from datetime import datetime
 
 bp = Blueprint('post', __name__, url_prefix='/post')
 
@@ -10,5 +14,17 @@ def _list():
 
 @bp.route('/detail/<int:post_id>/')
 def detail(post_id):
+    form = CommentForm()
     post = Post.query.get_or_404(post_id)
-    return render_template('post/post_detail.html', post=post)
+    return render_template('post/post_detail.html', post=post, form=form)
+
+@bp.route('/create/', methods=('GET', 'POST'))
+def create():
+    form = PostForm()
+    # breakpoint()
+    if request.method == 'POST' and form.validate_on_submit():
+        post = Post(subject=form.subject.data, content=form.content.data, create_date=datetime.now())
+        db.session.add(post)
+        db.session.commit()
+        return redirect(url_for('main.index'))
+    return render_template('post/post_form.html', form=form)

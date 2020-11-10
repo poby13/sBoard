@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% block content %}
-
 <div class="container my-3">
     <table class="table">
         <thead>
@@ -28,6 +27,7 @@
         {% endif %}
         </tbody>
     </table>
-</div>
 
+    <a href="{{ url_for('post.create') }}" class="btn btn-primary">질문 등록하기</a>
+</div>
 {% endblock %}
