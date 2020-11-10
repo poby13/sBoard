@@ -5,6 +5,7 @@
 - docker에 마리아디비
 - 가상환경 패키지 설치(requitements.txt 참고)
 - 마리아디비 연결을 위한 패키지(mariadb) 설치방법은 https://tinyurl.com/y2mxrkc5 참고
+- bootatrap 버전 4.5.3
 
 ## 처음 시작하는 경우
 - 데이터베이스명 sboard_db
@@ -56,3 +57,4 @@ $ flask db migrate
 $ flask db upgrade
 
 참고. db 버전을 alembic_version 테이블에 저장
+
