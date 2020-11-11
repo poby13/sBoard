@@ -1,9 +1,9 @@
-from flask import Blueprint, url_for, render_template, flash, request
+from flask import Blueprint, url_for, render_template, flash, request, session
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import redirect
 
 from main import db
-from main.forms import UserCreateForm
+from main.forms import UserCreateForm, UserLoginForm
 from main.models import User
 
 import bcrypt
@@ -24,6 +24,7 @@ def _pwhash(str):
 def signup():
     form = UserCreateForm()
     if request.method == 'POST' and form.validate_on_submit():
+        # 쿼리 결과가 여러개인 경우 첫번째 레코드를 반환한다. one()은 결과 값이 한 개인 경우 사용한다. 여러개이면 예외가 발생한다.
         user = User.query.filter_by(username=form.username.data).first()
         if not user:
             user = User(username=form.username.data,
@@ -37,3 +38,20 @@ def signup():
             flash('이미 존재하는 사용자입니다.')
     return render_template('auth/signup.html', form=form)
 
+@bp.route('/login/', methods=('GET', 'POST'))
+def login():
+    form = UserLoginForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        error = None
+        user = User.query.filter_by(username=form.username.data).first()
+        if not user:
+            error = "존재하지 않는 사용자입니다."
+        # elif not check_password_hash(user.password, form.password.data):
+        elif not bcrypt.checkpw(form.password.data.encode('utf-8'), user.password):
+            error = "비밀번호가 올바르지 않습니다."
+        if error is None:
+            session.clear()
+            session['user_id'] = user.id
+            return redirect(url_for('main.index'))
+        flash(error)
+    return render_template('auth/login.html', form=form)
