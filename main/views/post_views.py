@@ -9,7 +9,9 @@ bp = Blueprint('post', __name__, url_prefix='/post')
 
 @bp.route('/list/')
 def _list():
+    page = request.args.get('page', type=int, default=1)  # 페이지
     post_list = Post.query.order_by(Post.create_date.desc())
+    post_list = post_list.paginate(page, per_page=10)
     return render_template('post/post_list.html', post_list=post_list)
 
 @bp.route('/detail/<int:post_id>/')

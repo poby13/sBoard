@@ -1,5 +1,10 @@
 # sboard 소스코드 활용정보
 
+## 변경사항
+프로젝트 이름 pybo를 main으로 변경
+Question과 Answer를 Post와 Comment로 변경
+
+
 ## 기본환경
 - 리눅스(wsl2)
 - docker에 마리아디비
