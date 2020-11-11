@@ -5,21 +5,23 @@
         <thead>
             <tr class="thead-dark">
                 <th>번호</th>
-                <th>제목</th>
+                <th style="width: 50%;">제목</th>
+                <th>글쓴이</th>
                 <th>작성일시</th>
             </tr>
         </thead>
         <tbody>
             {% if post_list %}
             {% for post in post_list.items %}
-            <tr>
+            <tr class="text-center">
                 <td>{{ post_list.total - ((post_list.page-1) * post_list.per_page) - loop.index0 }}</td>
-                <td>
+                <td class="text-left">
                     <a href="{{ url_for('post.detail', post_id=post.id) }}">{{ post.subject }}</a>
                     {% if post.comment_set|length > 0 %}
                     <span class="text-danger small ml-2">{{ post.comment_set|length }}</span>
                     {% endif %}
                 </td>
+                <td>{{ post.user.username }}</td>
                 <td>{{ post.create_date|datetime }}</td>
             </tr>
             {% endfor %}

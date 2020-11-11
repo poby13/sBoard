@@ -6,6 +6,9 @@ class Post(db.Model):
     subject = db.Column(db.String(200), nullable=False)
     content = db.Column(db.Text(), nullable=False)
     create_date = db.Column(db.DateTime(), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
+    # user 속성은 Post모델에서 계정모델(User)을 참조하기 위해서 추가된 속성으로 post.user.username과 같이 사용된다.
+    user = db.relationship('User', backref=db.backref('post_set'))
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -13,6 +16,8 @@ class Comment(db.Model):
     post = db.relationship('Post', backref=db.backref('comment_set'))
     content = db.Column(db.Text(), nullable=False)
     create_date = db.Column(db.DateTime(), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
+    user = db.relationship('User', backref=db.backref('comment_set'))
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)

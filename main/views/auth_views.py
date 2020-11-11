@@ -7,6 +7,7 @@ from main.forms import UserCreateForm, UserLoginForm
 from main.models import User
 
 import bcrypt
+import functools
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -64,8 +65,18 @@ def load_logged_in_user():
     else:
         g.user = User.query.get(user_id)
 
-
 @bp.route('/logout/')
 def logout():
     session.clear()
     return redirect(url_for('main.index'))
+
+# login_required 데코데이터 함수 생성
+# g.user가 None이면 로그인 화면으로 redirect
+# 사용법: @login_requited
+def login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return redirect(url_for('auth.login'))
+        return view(**kwargs)
+    return wrapped_view

@@ -1,5 +1,6 @@
-from flask import Blueprint, url_for, request, render_template
+from flask import Blueprint, url_for, request, render_template, g
 from main.models import Post
+from main.views.auth_views import login_required
 from ..forms import PostForm, CommentForm
 from .. import db
 from werkzeug.utils import redirect
@@ -21,11 +22,12 @@ def detail(post_id):
     return render_template('post/post_detail.html', post=post, form=form)
 
 @bp.route('/create/', methods=('GET', 'POST'))
+@login_required
 def create():
     form = PostForm()
     # breakpoint()
     if request.method == 'POST' and form.validate_on_submit():
-        post = Post(subject=form.subject.data, content=form.content.data, create_date=datetime.now())
+        post = Post(subject=form.subject.data, content=form.content.data, create_date=datetime.now(), user=g.user)
         db.session.add(post)
         db.session.commit()
         return redirect(url_for('main.index'))
