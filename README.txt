@@ -5,6 +5,7 @@
 - Question과 Answer를 Post와 Comment로 변경
 - 비밀번호 암호화는 bcrypt를 사용
 - DBMS는 mariadb를 사용
+- 로그인과정은 로그인, 로그인사용자 확인, 로그아웃으로 구분하여 커밋
 
 ## 기본환경
 - 리눅스(wsl2)
