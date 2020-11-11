@@ -16,6 +16,9 @@
                 <td>{{ post_list.total - ((post_list.page-1) * post_list.per_page) - loop.index0 }}</td>
                 <td>
                     <a href="{{ url_for('post.detail', post_id=post.id) }}">{{ post.subject }}</a>
+                    {% if post.comment_set|length > 0 %}
+                    <span class="text-danger small ml-2">{{ post.comment_set|length }}</span>
+                    {% endif %}
                 </td>
                 <td>{{ post.create_date|datetime }}</td>
             </tr>
@@ -27,7 +30,7 @@
             {% endif %}
         </tbody>
     </table>
-    <ul class="pagination justify-content-center">
+    <ul class="pagination justify-content-center"변변>
         <!-- 이전페이지 -->
         {% if post_list.has_prev %}
         <li class="page-item">
