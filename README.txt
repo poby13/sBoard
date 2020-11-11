@@ -1,9 +1,10 @@
 # sboard 소스코드 활용정보
 
-## 변경사항
-프로젝트 이름 pybo를 main으로 변경
-Question과 Answer를 Post와 Comment로 변경
-
+## 점프투플라스크와 다른점
+- 프로젝트 이름 pybo를 main으로 변경
+- Question과 Answer를 Post와 Comment로 변경
+- 비밀번호 암호화는 bcrypt를 사용
+- DBMS는 mariadb를 사용
 
 ## 기본환경
 - 리눅스(wsl2)
