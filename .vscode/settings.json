@@ -1,0 +1,8 @@
+{
+    "python.pythonPath": "venv/bin/python",
+    // Instance of 'SQLAlchemy' has no 'Column' member (no-member) 모델에서 문제발생시 적용
+    "python.linting.pylintArgs": [
+        "--load-plugins",
+        "pylint-flask"
+    ]
+}

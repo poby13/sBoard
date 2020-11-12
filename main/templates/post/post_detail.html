@@ -11,6 +11,14 @@
                     <div>{{ post.create_date|datetime }}</div>
                 </div>
             </div>
+            {% if g.user == post.user %}
+            <div class="my-3">
+                <a href="{{ url_for('post.modify', post_id=post.id) }}"
+                    class="btn btn-sm btn-outline-secondary">수정</a>
+                <a href="#" class="delete btn btn-sm btn-outline-secondary"
+                    data-uri="{{ url_for('post.delete', post_id=post.id) }}">삭제</a>
+            </div>
+            {% endif %}
         </div>
     </div>
     <h5 class="border-bottom my-3 py-2">{{ post.comment_set|length }}개의 댓글이 있습니다.</h5>
@@ -24,6 +32,14 @@
                     <div>{{ comment.create_date|datetime }}</div>
                 </div>
             </div>
+            {% if g.user == comment.user %}
+            <div class="my-3">
+                <a href="{{ url_for('comment.modify', comment_id=comment.id) }}"
+                    class="btn btn-sm btn-outline-secondary">수정</a>
+                <a href="#" class="delete btn btn-sm btn-outline-secondary "
+                    data-uri="{{ url_for('comment.delete', comment_id=comment.id) }}">삭제</a>
+            </div>
+            {% endif %}
         </div>
     </div>
     {% endfor %}
@@ -41,4 +57,15 @@
         <input type="submit" value="댓글등록" class="btn btn-primary">
     </form>
 </div>
+{% endblock %}
+{% block script %}
+<script type='text/javascript'>
+$(document).ready(function(){
+    $(".delete").on('click', function() {
+        if(confirm("정말로 삭제하시겠습니까?")) {
+            location.href = $(this).data('uri');
+        }
+    });
+});
+</script>
 {% endblock %}

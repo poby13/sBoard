@@ -3,7 +3,7 @@ test*
 
 # 환경파일
 venv/
-.vscode/
+# .vscode/
 
 # 기타
 __pycache__/
