@@ -15,9 +15,20 @@
 - bootatrap 버전 4.5.3
 
 ## 처음 시작하는 경우
-- 데이터베이스명 sboard_db
-- db에 sboard_db 데이터베이스 생성
 
+1. 파이썬 가상환경 구축
+- 위 기본환경 참고
+
+2. 도커에 mariadb 설치
+- WSL2에서 Docker 원격 컨테이너 시작 https://tinyurl.com/y4yw6535
+- 마리아디비 연결을 위한 패키지(mariadb) 설치방법은 https://tinyurl.com/y2mxrkc5 참고
+
+$ docker run --name sboard-db -e MYSQL_ROOT_PASSWORD=qwer1234 -p 3306:3306 -d mariadb:latest
+
+3. 데이터베이스 설정
+- sboard_db를 사용하기 위해 db에 sboard_db 데이터베이스 생성
+
+$ . setEnv
 $ flask db init
 $ flask db migrate
 $ flask db upgrade
@@ -36,16 +47,6 @@ $ flask run
 테이블 확인
 > .tables
 스키마 확인
-
-## sqlite3에서 mariadb(도커위에)로 데이터베이스 변경
-
-### 도커에 mariadb 설치
-- 마리아디비 연결을 위한 패키지(mariadb) 설치방법은 https://tinyurl.com/y2mxrkc5 참고
-
-$ docker pull mariadb
-$ docker run --name sboard-db -e MYSQL_ROOT_PASSWORD=qwer1234 -p 3306:3306 -d mariadb:latest
-
-### user00 사용자 추가 및 sboard_db 작업권한 부여
 
 ### mariadb의 db connector는 mysql을 사용
 
