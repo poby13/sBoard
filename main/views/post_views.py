@@ -1,7 +1,7 @@
 from flask import Blueprint, url_for, request, render_template, g, flash
 from main.models import Post
 from main.views.auth_views import login_required
-from ..forms import PostForm, CommentForm
+from ..forms import PostForm, ReplyForm
 from .. import db
 from werkzeug.utils import redirect
 from datetime import datetime
@@ -17,7 +17,7 @@ def _list():
 
 @bp.route('/detail/<int:post_id>/')
 def detail(post_id):
-    form = CommentForm()
+    form = ReplyForm()
     post = Post.query.get_or_404(post_id)
     return render_template('post/post_detail.html', post=post, form=form)
 

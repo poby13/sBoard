@@ -2,7 +2,7 @@
 
 ## 점프투플라스크와 다른점
 - 프로젝트 이름 pybo를 main으로 변경
-- Question과 Answer를 Post와 Comment로 변경
+- Question과 Answer를 Post와 Reply로 변경
 - 비밀번호 암호화는 bcrypt를 사용
 - DBMS는 mariadb를 사용
 - 로그인과정은 로그인, 로그인사용자 확인, 로그아웃으로 구분하여 커밋
@@ -66,3 +66,14 @@ $ flask db upgrade
 
 참고. db 버전을 alembic_version 테이블에 저장
 
+#### 모델에서 Comment를 Reply로 명칭 변경하기
+먼저 텍스트 검색을 통해 Comment를 Reply로, comment를 reply로 변경
+comment_voews.py를 reply.py로 변경
+
+flask db migrate와 upgrade를 진행
+
+[문제] 프로젝트를 git애서 받아 새로 진행하는 경우 migrations가 비어 있어 아래 오류발생
+ERROR [root] Error: Can't locate revision identified by '71cede82a39e'
+
+[해결] https://tinyurl.com/yy944pyc
+지금 디비에 있는 alembic_versions테이블을 삭제하고 초기화부터 다시 진행하면 됨.

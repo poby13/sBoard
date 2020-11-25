@@ -17,8 +17,8 @@
                 <td>{{ post_list.total - ((post_list.page-1) * post_list.per_page) - loop.index0 }}</td>
                 <td class="text-left">
                     <a href="{{ url_for('post.detail', post_id=post.id) }}">{{ post.subject }}</a>
-                    {% if post.comment_set|length > 0 %}
-                    <span class="text-danger small ml-2">{{ post.comment_set|length }}</span>
+                    {% if post.reply_set|length > 0 %}
+                    <span class="text-danger small ml-2">{{ post.reply_set|length }}</span>
                     {% endif %}
                 </td>
                 <td>{{ post.user.username }}</td>
