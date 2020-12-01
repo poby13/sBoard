@@ -26,4 +26,15 @@ class User(db.Model):
     username = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.BLOB(60), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
+    user = db.relationship('User', backref=db.backref('comment_set'))
+    content = db.Column(db.Text(), nullable=False)
+    create_date = db.Column(db.DateTime(), nullable=False)
+    modify_date = db.Column(db.DateTime())
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id', ondelete='CASCADE'), nullable=True)
+    post = db.relationship('Post', backref=db.backref('comment_set'))
+    reply_id = db.Column(db.Integer, db.ForeignKey('reply.id', ondelete='CASCADE'), nullable=True)
+    reply = db.relationship('Reply', backref=db.backref('comment_set'))
