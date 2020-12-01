@@ -5,6 +5,7 @@
         <thead>
             <tr class="thead-dark">
                 <th>번호</th>
+                <th>추천</th>
                 <th style="width: 50%;">제목</th>
                 <th>글쓴이</th>
                 <th>작성일시</th>
@@ -15,6 +16,11 @@
             {% for post in post_list.items %}
             <tr class="text-center">
                 <td>{{ post_list.total - ((post_list.page-1) * post_list.per_page) - loop.index0 }}</td>
+                <td>
+                    {% if post.voter|length > 0 %}
+                    <span class="badge badge-warning px-2 py-1">{{ post.voter|length }}</span>
+                    {% endif %}
+                </td>
                 <td class="text-left">
                     <a href="{{ url_for('post.detail', post_id=post.id) }}">{{ post.subject }}</a>
                     {% if post.reply_set|length > 0 %}
