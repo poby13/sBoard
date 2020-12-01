@@ -20,7 +20,7 @@ def create_post(post_id):
         comment = Comment(user=g.user, content=form.content.data, create_date=datetime.now(), post=post)
         db.session.add(comment)
         db.session.commit()
-        return redirect(url_for('post.detail', post_id=post_id))
+        return redirect('{}#comment_{}'.format(url_for('post.detail', post_id=post_id), comment.id))
     return render_template('comment/comment_form.html', form=form)
 
 @bp.route('/modify/post/<int:comment_id>', methods=('GET', 'POST'))
@@ -36,7 +36,7 @@ def modify_post(comment_id):
             form.populate_obj(comment)
             comment.modify_date = datetime.now()  # 수정일시 저장
             db.session.commit()
-            return redirect(url_for('post.detail', post_id=comment.post.id))
+            return redirect('{}#comment_{}'.format(url_for('post.detail', post_id=comment.post.id), comment.id))
     else:
         form = CommentForm(obj=comment)
     return render_template('comment/comment_form.html', form=form)
@@ -63,7 +63,7 @@ def create_reply(reply_id):
         comment = Comment(user=g.user, content=form.content.data, create_date=datetime.now(), reply=reply)
         db.session.add(comment)
         db.session.commit()
-        return redirect(url_for('post.detail', post_id=reply.post.id))
+        return redirect('{}#comment_{}'.format(url_for('post.detail', post_id=reply.post.id), comment.id))
     return render_template('comment/comment_form.html', form=form)
 
 @bp.route('/modify/reply/<int:comment_id>', methods=('GET', 'POST'))
@@ -79,7 +79,7 @@ def modify_reply(comment_id):
             form.populate_obj(comment)
             comment.modify_date = datetime.now()  # 수정일시 저장
             db.session.commit()
-            return redirect(url_for('post.detail', post_id=comment.reply.post.id))
+            return redirect('{}#comment_{}'.format(url_for('post.detail', post_id=comment.reply.post.id), comment.id))
     else:
         form = CommentForm(obj=comment)
     return render_template('comment/comment_form.html', form=form)

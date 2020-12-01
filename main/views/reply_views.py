@@ -21,7 +21,7 @@ def create(post_id):
         reply = Reply(content=content, create_date=datetime.now(), user=g.user)
         post.reply_set.append(reply)
         db.session.commit()
-        return redirect(url_for('post.detail', post_id=post_id))
+        return redirect('{}#reply_{}'.format(url_for('post.detail', post_id=post_id), reply.id))
     return render_template('post/post_detail.html', post=post, form=form)
 
 @bp.route('/modify/<int:reply_id>', methods=('GET', 'POST'))
@@ -37,7 +37,7 @@ def modify(reply_id):
             form.populate_obj(reply)
             reply.modify_date = datetime.now()  # 수정일시 저장
             db.session.commit()
-            return redirect(url_for('post.detail', post_id=reply.post.id))
+            return redirect('{}#reply_{}'.format(url_for('post.detail', post_id=post_id), reply.id))
     else:
         form = ReplyForm(obj=reply)
     return render_template('reply/reply_form.html', reply=reply, form=form)
