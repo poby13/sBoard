@@ -23,7 +23,7 @@ def detail(post_id):
 
 @bp.route('/create/', methods=('GET', 'POST'))
 @login_required
-def create():
+def create(post_id):
     form = PostForm()
     # breakpoint()
     if request.method == 'POST' and form.validate_on_submit():
