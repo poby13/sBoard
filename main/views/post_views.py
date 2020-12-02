@@ -1,5 +1,5 @@
 from flask import Blueprint, url_for, request, render_template, g, flash
-from main.models import Post
+from main.models import Post, Reply, User
 from main.views.auth_views import login_required
 from ..forms import PostForm, ReplyForm
 from .. import db
@@ -10,10 +10,24 @@ bp = Blueprint('post', __name__, url_prefix='/post')
 
 @bp.route('/list/')
 def _list():
-    page = request.args.get('page', type=int, default=1)  # 페이지
+    # 입력 파라미터
+    page = request.args.get('page', type=int, default=1)
+    kw = request.args.get('kw', type=str, default='')
+
+    # 조회
     post_list = Post.query.order_by(Post.create_date.desc())
+    if kw:
+        search = '%%{}%%'.format(kw)
+        sub_query = db.session.query(Reply.post_id, Reply.content, User.username).join(User, Reply.user_id == User.id).subquery()
+        post_list = post_list.join(User).outerjoin(sub_query, sub_query.c.post_id == Post.id).filter(Post.subject.ilike(search) | 
+                    Post.content.ilike(search) |  
+                    User.username.ilike(search) | 
+                    sub_query.c.content.ilike(search) |  
+                    sub_query.c.username.ilike(search)).distinct()
+
+    # 페이징
     post_list = post_list.paginate(page, per_page=10)
-    return render_template('post/post_list.html', post_list=post_list)
+    return render_template('post/post_list.html', post_list=post_list, page=page, kw=kw)
 
 @bp.route('/detail/<int:post_id>/')
 def detail(post_id):
@@ -23,7 +37,7 @@ def detail(post_id):
 
 @bp.route('/create/', methods=('GET', 'POST'))
 @login_required
-def create(post_id):
+def create(): # 새글 추가시 post_id가 필요없음
     form = PostForm()
     # breakpoint()
     if request.method == 'POST' and form.validate_on_submit():
