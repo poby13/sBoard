@@ -1,8 +1,9 @@
 from flask import Blueprint, url_for, request, render_template, g, flash
-from main.models import Post, Reply, User
+from main.models import Post, Reply, User, post_voter
 from main.views.auth_views import login_required
 from ..forms import PostForm, ReplyForm
 from .. import db
+from sqlalchemy import func
 from werkzeug.utils import redirect
 from datetime import datetime
 
@@ -13,9 +14,20 @@ def _list():
     # 입력 파라미터
     page = request.args.get('page', type=int, default=1)
     kw = request.args.get('kw', type=str, default='')
+    so = request.args.get('so', type=str, default='recent')
+
+    # 정렬
+    if so == 'recommend':
+        sub_query = db.session.query(post_voter.c.post_id, func.count('*').label('num_voter')).group_by(post_voter.c.post_id).subquery()
+        post_list = Post.query.outerjoin(sub_query, Post.id == sub_query.c.post_id).order_by(sub_query.c.num_voter.desc(), Post.create_date.desc())
+    elif so == 'popular':
+        sub_query = db.session.query(Reply.post_id, func.count('*').label('num_reply')).group_by(Reply.post_id).subquery()
+        post_list = Post.query.outerjoin(sub_query, Post.id == sub_query.c.post_id).order_by(sub_query.c.num_reply.desc(), Post.create_date.desc())
+    else:  # recent
+        post_list = Post.query.order_by(Post.create_date.desc())
 
     # 조회
-    post_list = Post.query.order_by(Post.create_date.desc())
+    # post_list = Post.query.order_by(Post.create_date.desc())
     if kw:
         search = '%%{}%%'.format(kw)
         sub_query = db.session.query(Reply.post_id, Reply.content, User.username).join(User, Reply.user_id == User.id).subquery()
