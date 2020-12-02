@@ -2,6 +2,7 @@
 from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from flaskext.markdown import Markdown
 
 import config
 import mariadb
@@ -17,6 +18,9 @@ def create_app():
     # ORM
     db.init_app(app)
     migrate.init_app(app, db)
+
+    # markdown
+    Markdown(app, extensions=['nl2br', 'fenced_code'])
 
     from . import models
 
