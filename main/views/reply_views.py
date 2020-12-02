@@ -37,7 +37,8 @@ def modify(reply_id):
             form.populate_obj(reply)
             reply.modify_date = datetime.now()  # 수정일시 저장
             db.session.commit()
-            return redirect('{}#reply_{}'.format(url_for('post.detail', post_id=post_id), reply.id))
+            return redirect('{}#reply_{}'.format(
+                url_for('post.detail', post_id=reply.post.id), reply.id))
     else:
         form = ReplyForm(obj=reply)
     return render_template('reply/reply_form.html', reply=reply, form=form)
